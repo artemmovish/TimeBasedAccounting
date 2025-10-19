@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="TimeSheet.Views.EmployeesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="Сотрудники" 
+                   FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Фильтры -->
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Отдел -->
+            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                <TextBlock Text="Отдел" Margin="0,0,0,5"/>
+                <ComboBox ItemsSource="{Binding Departments}" 
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedDepartment}"
+                          Height="25">
+                </ComboBox>
+            </StackPanel>
+
+            <CheckBox Grid.Column="1" Content="Только активные" 
+                      IsChecked="{Binding OnlyActive}"
+                      VerticalAlignment="Center" Margin="0,0,15,0"/>
+
+            <Button Grid.Column="2" Content="Обновить" 
+                    Command="{Binding LoadEmployeesCommand}"
+                    VerticalAlignment="Bottom" Padding="15,8" 
+                    Background="#3498DB" Foreground="White" Height="30"/>
+        </Grid>
+
+        <!-- Таблица сотрудников -->
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Employees}" 
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  Background="White">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="200"/>
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" Width="150"/>
+                <DataGridTextColumn Header="Отдел" Binding="{Binding Department.Name}" Width="120"/>
+                <DataGridTextColumn Header="Дата приема" Binding="{Binding HireDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridCheckBoxColumn Header="Активен" Binding="{Binding IsActive}" Width="80"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeBasedAccounting.Core", "TimeBasedAccounting.Core\TimeBasedAccounting.Core.csproj", "{921B497E-76E3-42E9-BDF9-C9EDF355171A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheet", "TimeSheet\TimeSheet.csproj", "{5C8E858E-F813-4744-97FF-8503271D8985}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{921B497E-76E3-42E9-BDF9-C9EDF355171A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921B497E-76E3-42E9-BDF9-C9EDF355171A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921B497E-76E3-42E9-BDF9-C9EDF355171A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921B497E-76E3-42E9-BDF9-C9EDF355171A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C8E858E-F813-4744-97FF-8503271D8985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C8E858E-F813-4744-97FF-8503271D8985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C8E858E-F813-4744-97FF-8503271D8985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C8E858E-F813-4744-97FF-8503271D8985}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1C62444-F134-4EF1-8C84-034800B08989}
+	EndGlobalSection
+EndGlobal
