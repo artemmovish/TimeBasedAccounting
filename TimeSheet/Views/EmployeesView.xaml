@@ -10,6 +10,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <!-- Заголовок -->
@@ -43,9 +44,8 @@
                     VerticalAlignment="Bottom" Padding="15,8" 
                     Background="#3498DB" Foreground="White" Height="30"/>
         </Grid>
-
         <!-- Таблица сотрудников -->
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Employees}" 
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}"
                   AutoGenerateColumns="False" IsReadOnly="True"
                   Background="White">
             <DataGrid.Columns>
@@ -56,5 +56,23 @@
                 <DataGridCheckBoxColumn Header="Активен" Binding="{Binding IsActive}" Width="80"/>
             </DataGrid.Columns>
         </DataGrid>
+        <!-- После DataGrid добавить -->
+        <!-- Кнопки операций -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Content="Добавить сотрудника" 
+                        Command="{Binding CreateEmployeeCommand}"
+                        Padding="15,8" Background="#27AE60" Foreground="White" Margin="0,0,10,0"/>
+            <Button Content="Редактировать" 
+                        Command="{Binding EditEmployeeCommand}"
+                        Padding="15,8" Background="#3498DB" Foreground="White" Margin="0,0,10,0"/>
+            <Button Content="Уволить" 
+                        Command="{Binding DeactivateEmployeeCommand}"
+                        Padding="15,8" Background="#E74C3C" Foreground="White"/>
+        </StackPanel>
+        
+        <!-- Режим операции -->
+        <ContentControl Grid.Row="0" Grid.RowSpan="4"
+                   Content="{Binding CurrentOperationView}"
+                   Visibility="{Binding IsOperationMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

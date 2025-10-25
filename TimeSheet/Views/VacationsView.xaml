@@ -57,5 +57,7 @@
                 Command="{Binding CreateVacationCommand}"
                 HorizontalAlignment="Left" Padding="20,10" 
                 Background="#27AE60" Foreground="White" FontWeight="Bold"/>
+
+
     </Grid>
 </UserControl>

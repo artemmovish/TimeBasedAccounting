@@ -1,10 +1,9 @@
-﻿// EmployeesViewModel.cs
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace TimeSheet.ViewModels
 {
@@ -22,7 +21,16 @@ namespace TimeSheet.ViewModels
         private Department _selectedDepartment;
 
         [ObservableProperty]
+        private Employee _selectedEmployee;
+
+        [ObservableProperty]
         private bool _onlyActive = true;
+
+        [ObservableProperty]
+        private object _currentOperationView;
+
+        [ObservableProperty]
+        private bool _isOperationMode;
 
         public EmployeesViewModel(IEmployeeService employeeService)
         {
@@ -32,9 +40,7 @@ namespace TimeSheet.ViewModels
 
         private async Task LoadDataAsync()
         {
-            var departments = await _employeeService.GetDepartmentsAsync();
-            Departments = new ObservableCollection<Department>(departments);
-
+            await LoadDepartmentsAsync();
             await LoadEmployeesAsync();
         }
 
@@ -46,12 +52,55 @@ namespace TimeSheet.ViewModels
             Employees = new ObservableCollection<Employee>(employees);
         }
 
-        partial void OnSelectedDepartmentChanged(Department value)
+        private async Task LoadDepartmentsAsync()
         {
-            _ = LoadEmployeesAsync();
+            var departments = await _employeeService.GetDepartmentsAsync();
+            Departments = new ObservableCollection<Department>(departments);
         }
 
-        partial void OnOnlyActiveChanged(bool value)
+        [RelayCommand]
+        private void CreateEmployee()
+        {
+            var vm = App.ServiceProvider.GetRequiredService<EmployeeOperationViewModel>();
+            vm.OnOperationCompleted += OnEmployeeOperationCompleted;
+            CurrentOperationView = new Views.EmployeeOperationView { DataContext = vm };
+            IsOperationMode = true;
+        }
+
+        [RelayCommand]
+        private void EditEmployee()
+        {
+            if (SelectedEmployee == null) return;
+
+            var vm = App.ServiceProvider.GetRequiredService<EmployeeOperationViewModel>();
+            vm.SetEmployeeForEdit(SelectedEmployee);
+            vm.OnOperationCompleted += OnEmployeeOperationCompleted;
+            CurrentOperationView = new Views.EmployeeOperationView { DataContext = vm };
+            IsOperationMode = true;
+        }
+
+        [RelayCommand]
+        private async Task DeactivateEmployeeAsync()
+        {
+            if (SelectedEmployee == null) return;
+
+            // Логика деактивации сотрудника
+            await LoadEmployeesAsync();
+        }
+
+        private void OnEmployeeOperationCompleted(object sender, EventArgs e)
+        {
+            if (sender is EmployeeOperationViewModel vm)
+            {
+                vm.OnOperationCompleted -= OnEmployeeOperationCompleted;
+            }
+
+            IsOperationMode = false;
+            CurrentOperationView = null;
+            _ = LoadEmployeesAsync(); // Обновляем список
+        }
+
+        partial void OnSelectedDepartmentChanged(Department value)
         {
             _ = LoadEmployeesAsync();
         }
