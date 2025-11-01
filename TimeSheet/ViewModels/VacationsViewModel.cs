@@ -5,6 +5,7 @@ using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TimeBasedAccounting.Core;
 
 namespace TimeSheet.ViewModels
 {

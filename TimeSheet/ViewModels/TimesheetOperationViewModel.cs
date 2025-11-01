@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using TimeBasedAccounting.Core;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;
 
@@ -74,7 +75,6 @@ namespace TimeSheet.ViewModels
                     System.Windows.MessageBox.Show("Заполните все обязательные поля");
                     return;
                 }
-
                 var result = await _timesheetService.AddOrUpdateTimesheetAsync(Timesheet);
                 OnOperationCompleted?.Invoke(this, EventArgs.Empty);
             }

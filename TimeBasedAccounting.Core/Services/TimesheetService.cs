@@ -38,8 +38,12 @@ namespace TimeBasedAccounting.Core.Services
                 await _db.SaveChangesAsync();
                 return existing;
             }
-
-            _db.Timesheets.Add(timesheet);
+            else
+            {
+                timesheet.RecordedBy = ActiveUser.UserId;
+                timesheet.RecordedAt = DateTime.Now;
+            }
+                _db.Timesheets.Add(timesheet);
             await _db.SaveChangesAsync();
             return timesheet;
         }
@@ -55,7 +59,7 @@ namespace TimeBasedAccounting.Core.Services
             }
             else
             {
-                lateness = new Lateness { TimesheetId = timesheetId, DurationMinutes = durationMinutes, Reason = reason };
+                lateness = new Lateness { TimesheetId = timesheetId, DurationMinutes = durationMinutes, Reason = reason};
                 _db.Latenesses.Add(lateness);
             }
 

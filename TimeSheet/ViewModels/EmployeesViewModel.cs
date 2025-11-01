@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using TimeBasedAccounting.Core;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;
 

@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.Design;
 using TimeBasedAccounting.Core.Context;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;
+
+
 
 namespace TimeBasedAccounting.Core.Services
 {
@@ -42,7 +40,7 @@ namespace TimeBasedAccounting.Core.Services
                 ReportData = reportJson,
                 Period = period,
                 GeneratedAt = DateTime.Now,
-                GeneratedBy = 1 // сюда можно передавать текущего пользователя
+                GeneratedBy = ActiveUser.UserId
             };
 
             _db.ReportCaches.Add(report);
@@ -84,7 +82,7 @@ namespace TimeBasedAccounting.Core.Services
                 ReportData = reportJson,
                 Period = period,
                 GeneratedAt = DateTime.Now,
-                GeneratedBy = 1
+                GeneratedBy = ActiveUser.UserId
             };
 
             _db.ReportCaches.Add(report);
@@ -132,7 +130,7 @@ namespace TimeBasedAccounting.Core.Services
                 ReportData = reportJson,
                 Period = period,
                 GeneratedAt = DateTime.Now,
-                GeneratedBy = 1
+                GeneratedBy = ActiveUser.UserId
             };
 
             _db.ReportCaches.Add(report);

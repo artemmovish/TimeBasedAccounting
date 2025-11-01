@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using TimeBasedAccounting.Core;
 using TimeBasedAccounting.Core.Context;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;

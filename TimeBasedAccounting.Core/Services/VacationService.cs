@@ -31,6 +31,8 @@ namespace TimeBasedAccounting.Core.Services
 
         public async Task<Vacation> CreateVacationAsync(Vacation vacation)
         {
+            vacation.CreatedBy = ActiveUser.UserId;
+            vacation.CreatedAt = DateTime.Now;
             _db.Vacations.Add(vacation);
             await _db.SaveChangesAsync();
             return vacation;
