@@ -11,7 +11,7 @@ namespace TimeBasedAccounting.Core.Models
         public int VacationId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Comment { get; set; }
 
         // Внешние ключи

@@ -12,7 +12,7 @@ namespace TimeBasedAccounting.Core.Models
         public string ReportType { get; set; }
         public string ReportData { get; set; } // JSON строка
         public DateTime Period { get; set; }
-        public DateTime GeneratedAt { get; set; }
+        public DateTime GeneratedAt { get; set; } = DateTime.Now;
 
         // Внешний ключ
         public int GeneratedBy { get; set; }

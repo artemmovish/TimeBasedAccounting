@@ -100,6 +100,13 @@ namespace TimeSheet.ViewModels
             IsOperationMode = true;
         }
 
+        private void OpenLatenessWindow()
+        {
+            if (SelectedTimesheet != null)
+            {
+                
+            }
+        }
         private void OnTimesheetOperationCompleted(object sender, EventArgs e)
         {
             if (sender is TimesheetOperationViewModel vm)

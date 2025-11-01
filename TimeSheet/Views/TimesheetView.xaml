@@ -97,8 +97,11 @@
                         Command="{Binding EditTimesheetCommand}"
                         Padding="15,8" Background="#3498DB" Foreground="White" Margin="0,0,10,0"/>
             <Button Content="Добавить опоздание" 
-                        Command="{Binding AddLatenessCommand}"
+                        Command="{Binding AddLatenessCommand}" Margin="0,0,10,0"
                         Padding="15,8" Background="#E67E22" Foreground="White"/>
+            <Button Content="Подробнее" 
+                    Command="{Binding OpenLatenessWindowCommand}"
+                    Padding="15,8" Background="#E67E22" Foreground="White"/>
         </StackPanel>
         
         <!-- Режим операции -->
