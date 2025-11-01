@@ -39,18 +39,20 @@ namespace TimeSheet.ViewModels
             AttendanceMarkers = new ObservableCollection<AttendanceMarker>
             {
                 new AttendanceMarker { MarkerId = 1, Code = "Я", Description = "Явка" },
-                new AttendanceMarker { MarkerId = 2, Code = "Н", Description = "Невыход" },
-                new AttendanceMarker { MarkerId = 3, Code = "ОТ", Description = "Отпуск" },
-                new AttendanceMarker { MarkerId = 4, Code = "Б", Description = "Болезнь" },
-                new AttendanceMarker { MarkerId = 5, Code = "К", Description = "Командировка" }
+                new AttendanceMarker { MarkerId = 2, Code = "ОТП", Description = "Отпуск" },
+                new AttendanceMarker { MarkerId = 3, Code = "Б", Description = "Больничный" },
+                new AttendanceMarker { MarkerId = 4, Code = "Н", Description = "Неявка" },
+                new AttendanceMarker { MarkerId = 5, Code = "Я/О", Description = "Явка с опозданием" },
+                new AttendanceMarker { MarkerId = 6, Code = "К", Description = "Командировка" },
+                new AttendanceMarker { MarkerId = 7, Code = "В", Description = "Выходной" }
             };
 
-            // Установка значений по умолчанию
-            if (Employees.Any())
-                Timesheet.EmployeeId = Employees.First().EmployeeId;
+            //// Установка значений по умолчанию
+            //if (Employees.Any())
+            //    Timesheet.EmployeeId = Employees.First().EmployeeId;
 
-            if (AttendanceMarkers.Any())
-                Timesheet.MarkerId = AttendanceMarkers.First().MarkerId;
+            //if (AttendanceMarkers.Any())
+            //    Timesheet.MarkerId = AttendanceMarkers.First().MarkerId;
         }
 
         public void SetTimesheetForEdit(Timesheet timesheet)

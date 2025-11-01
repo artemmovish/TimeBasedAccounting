@@ -53,7 +53,7 @@
         </DataGrid>
 
         <!-- Кнопка создания отпуска -->
-        <Button Grid.Row="3" Content="Добавить отпуск" 
+        <Button Grid.Row="3" Content="Добавить отпуск" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{Binding CreateVacationCommand}"
                 HorizontalAlignment="Left" Padding="20,10" 
                 Background="#27AE60" Foreground="White" FontWeight="Bold"/>

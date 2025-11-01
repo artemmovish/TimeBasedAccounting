@@ -44,5 +44,15 @@ namespace TimeBasedAccounting.Core.Services
             await _db.SaveChangesAsync();
             return vacation;
         }
+
+        public async Task<IEnumerable<VacationType>> GetVacationTypesAsync()
+        {
+            return await _db.VacationTypes.ToListAsync();
+        }
+
+        public async Task<IEnumerable<VacationStatus>> GetVacationStatusesAsync()
+        {
+            return await _db.VacationStatuses.ToListAsync();
+        }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TimeBasedAccounting.Core.Models;
+using System.Collections.ObjectModel;
+using System.Windows;
 using TimeBasedAccounting.Core.Interfaces;
+using TimeBasedAccounting.Core.Models;
+using TimeBasedAccounting.Core.Services;
 
 namespace TimeSheet.ViewModels
 {
@@ -15,9 +18,25 @@ namespace TimeSheet.ViewModels
         [ObservableProperty]
         private string _title = "Добавление сотрудника";
 
+        [ObservableProperty]
+        private ObservableCollection<Department> _departments;
+
+
         public EmployeeOperationViewModel(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
+            _ = LoadDepartmentsAsync();
+        }
+
+
+        private async Task LoadDepartmentsAsync()
+        {
+            var departments = await _employeeService.GetDepartmentsAsync();
+            Departments = new ObservableCollection<Department>(departments);
+
+            // Установка отдела по умолчанию
+            if (Departments.Any() && Employee.DepartmentId == 0)
+                Employee.DepartmentId = Departments.First().DepartmentId;
         }
 
         public void SetEmployeeForEdit(Employee employee)
@@ -34,14 +53,13 @@ namespace TimeSheet.ViewModels
         {
             try
             {
-                // Здесь будет логика сохранения сотрудника
-                // В реальном приложении нужно добавить соответствующие методы в сервис
+                await _employeeService.CreateEmployeeAsync(Employee);
 
                 OnOperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                // Обработка ошибок
+                MessageBox.Show(ex.Message, "Error");
             }
         }
 

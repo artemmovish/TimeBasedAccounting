@@ -26,5 +26,10 @@ namespace TimeBasedAccounting.Core.Interfaces
         /// Получить список отделов
         /// </summary>
         Task<IEnumerable<Department>> GetDepartmentsAsync();
+
+        Task<Employee> CreateEmployeeAsync(Employee employee);
+        Task<Employee> UpdateEmployeeAsync(Employee employee);
+        Task<bool> DeactivateEmployeeAsync(int employeeId);
+        Task<bool> ActivateEmployeeAsync(int employeeId);
     }
 }

@@ -31,5 +31,51 @@ namespace TimeBasedAccounting.Core.Services
 
         public Task<IEnumerable<Department>> GetDepartmentsAsync() =>
             _db.Departments.Include(d => d.Employees).ToListAsync().ContinueWith(t => t.Result.AsEnumerable());
+
+        public async Task<Employee> CreateEmployeeAsync(Employee employee)
+        {
+            employee.IsActive = true;
+
+            _db.Employees.Add(employee);
+            await _db.SaveChangesAsync();
+            return employee;
+        }
+
+        public async Task<Employee> UpdateEmployeeAsync(Employee employee)
+        {
+            var existing = await _db.Employees.FindAsync(employee.EmployeeId);
+            if (existing == null)
+                throw new ArgumentException("Employee not found");
+
+            // Обновляем только разрешенные поля
+            existing.FullName = employee.FullName;
+            existing.Position = employee.Position;
+            existing.DepartmentId = employee.DepartmentId;
+            existing.HireDate = employee.HireDate;
+            existing.IsActive = employee.IsActive;
+
+            await _db.SaveChangesAsync();
+            return existing;
+        }
+
+        public async Task<bool> DeactivateEmployeeAsync(int employeeId)
+        {
+            var employee = await _db.Employees.FindAsync(employeeId);
+            if (employee == null) return false;
+
+            employee.IsActive = false;
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ActivateEmployeeAsync(int employeeId)
+        {
+            var employee = await _db.Employees.FindAsync(employeeId);
+            if (employee == null) return false;
+
+            employee.IsActive = true;
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }

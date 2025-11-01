@@ -62,5 +62,15 @@ namespace TimeBasedAccounting.Core.Services
             await _db.SaveChangesAsync();
             return lateness;
         }
+        public async Task<IEnumerable<AttendanceMarker>> GetAttendanceMarkersAsync()
+        {
+            return await _db.AttendanceMarkers.ToListAsync();
+        }
+
+        public async Task<AttendanceMarker?> GetMarkerByIdAsync(int markerId)
+        {
+            return await _db.AttendanceMarkers.FindAsync(markerId);
+        }
+
     }
 }

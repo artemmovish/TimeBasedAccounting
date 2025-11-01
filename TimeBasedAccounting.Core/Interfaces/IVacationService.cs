@@ -26,5 +26,8 @@ namespace TimeBasedAccounting.Core.Interfaces
         /// Обновить статус отпуска
         /// </summary>
         Task<Vacation> UpdateVacationStatusAsync(int vacationId, int newStatusId);
+
+        Task<IEnumerable<VacationType>> GetVacationTypesAsync();
+        Task<IEnumerable<VacationStatus>> GetVacationStatusesAsync();
     }
 }

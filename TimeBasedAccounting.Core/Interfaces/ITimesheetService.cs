@@ -26,5 +26,8 @@ namespace TimeBasedAccounting.Core.Interfaces
         /// Добавить или обновить запись об опоздании
         /// </summary>
         Task<Lateness?> AddOrUpdateLatenessAsync(int timesheetId, int durationMinutes, string reason);
+
+        Task<IEnumerable<AttendanceMarker>> GetAttendanceMarkersAsync();
+        Task<AttendanceMarker?> GetMarkerByIdAsync(int markerId);
     }
 }

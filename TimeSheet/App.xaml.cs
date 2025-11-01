@@ -7,6 +7,7 @@ using TimeBasedAccounting.Core.Context;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Services;
 using TimeSheet.ViewModels;
+using TimeSheet.Windows;
 
 namespace TimeSheet
 {
@@ -25,9 +26,28 @@ namespace TimeSheet
             // Инициализация базы данных и заполнение тестовыми данными
             InitializeDatabase();
 
-            var mainWindow = new MainWindow();
-            mainWindow.DataContext = ServiceProvider.GetRequiredService<MainViewModel>();
-            mainWindow.Show();
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+            // Создаем окно входа
+            var loginWindow = new LoginWindow();
+
+            // Устанавливаем DataContext для окна входа
+            loginWindow.DataContext = ServiceProvider.GetRequiredService<LoginViewModel>();
+
+            if (loginWindow.ShowDialog() == true)
+            {
+                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+                // Если вход успешен, показываем главное окно
+                var mainWindow = new MainWindow();
+                mainWindow.DataContext = ServiceProvider.GetRequiredService<MainViewModel>();
+                mainWindow.Show();
+            }
+            else
+            {
+                MessageBox.Show("Доступ запрещен");
+                Shutdown();
+            }
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -56,6 +76,7 @@ namespace TimeSheet
             services.AddTransient<EmployeesViewModel>();
             services.AddTransient<VacationsViewModel>();
             services.AddTransient<ReportsViewModel>();
+            services.AddTransient<LoginViewModel>();
             // Регистрация ViewModels для операций
             services.AddTransient<EmployeeOperationViewModel>();
             services.AddTransient<TimesheetOperationViewModel>();

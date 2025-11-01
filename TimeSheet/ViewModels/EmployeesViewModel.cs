@@ -12,6 +12,8 @@ namespace TimeSheet.ViewModels
         private readonly IEmployeeService _employeeService;
 
         [ObservableProperty]
+        private bool _isAdmin = ActiveUser.RoleId ? true : false;
+        [ObservableProperty]
         private ObservableCollection<Employee> _employees;
 
         [ObservableProperty]

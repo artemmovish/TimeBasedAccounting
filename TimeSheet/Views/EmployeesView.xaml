@@ -58,11 +58,11 @@
         </DataGrid>
         <!-- После DataGrid добавить -->
         <!-- Кнопки операций -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button Content="Добавить сотрудника" 
                         Command="{Binding CreateEmployeeCommand}"
                         Padding="15,8" Background="#27AE60" Foreground="White" Margin="0,0,10,0"/>
-            <Button Content="Редактировать" 
+            <Button Content="Редактировать"
                         Command="{Binding EditEmployeeCommand}"
                         Padding="15,8" Background="#3498DB" Foreground="White" Margin="0,0,10,0"/>
             <Button Content="Уволить" 

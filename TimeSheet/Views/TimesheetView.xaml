@@ -89,7 +89,7 @@
         </DataGrid>
 
         <!-- Кнопки операций -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button Content="Добавить запись" 
                         Command="{Binding CreateTimesheetCommand}"
                         Padding="15,8" Background="#27AE60" Foreground="White" Margin="0,0,10,0"/>

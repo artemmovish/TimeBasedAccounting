@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimeBasedAccounting.Core.Models;
+using TimeBasedAccounting.Core.Services;
 
 namespace TimeBasedAccounting.Core.Context
 {
@@ -8,6 +9,10 @@ namespace TimeBasedAccounting.Core.Context
         public AccountingDbContext(DbContextOptions<AccountingDbContext> options) : base(options)
         {
         }
+
+        // 👇 Эти сущности не имеют таблиц, но нужны для FromSqlRaw
+        public DbSet<AddUserResult> AddUserResults { get; set; }
+        public DbSet<LoginResult> LoginResults { get; set; }
 
         /// <summary>
         /// Маркеры посещаемости (например, "Явка", "Отпуск", "Больничный" и т.д.).
@@ -62,6 +67,10 @@ namespace TimeBasedAccounting.Core.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Отмечаем их как "keyless" (без ключей)
+            modelBuilder.Entity<AddUserResult>().HasNoKey();
+            modelBuilder.Entity<LoginResult>().HasNoKey();
 
             // Конфигурация AttendanceMarker
             modelBuilder.Entity<AttendanceMarker>(entity =>

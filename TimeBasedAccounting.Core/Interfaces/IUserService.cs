@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimeBasedAccounting.Core.Models;
+using TimeBasedAccounting.Core.Services;
+using static TimeBasedAccounting.Core.Services.UserService;
 
 namespace TimeBasedAccounting.Core.Interfaces
 {
@@ -12,19 +14,7 @@ namespace TimeBasedAccounting.Core.Interfaces
     /// </summary>
     public interface IUserService
     {
-        /// <summary>
-        /// Аутентификация пользователя
-        /// </summary>
-        Task<User?> AuthenticateAsync(string login, string password);
-
-        /// <summary>
-        /// Получить пользователя по идентификатору
-        /// </summary>
-        Task<User> GetUserByIdAsync(int userId);
-
-        /// <summary>
-        /// Получить всех пользователей
-        /// </summary>
-        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<LoginResult> UserLoginAsync(string login, string password);
+        Task<AddUserResult> AddNewUserAsync(string login, string passwordHash, string role, string fullName);
     }
 }

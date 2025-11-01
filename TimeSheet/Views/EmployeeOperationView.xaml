@@ -31,16 +31,14 @@
                     <TextBox Text="{Binding Employee.Position}" Height="25"/>
                 </StackPanel>
 
-                <!-- Email -->
+                <!-- Отдел -->
                 <StackPanel Margin="0,0,0,15">
-                    <TextBlock Text="Email" Margin="0,0,0,5"/>
-                    <TextBox Text="{Binding Employee.Email}" Height="25"/>
-                </StackPanel>
-
-                <!-- Телефон -->
-                <StackPanel Margin="0,0,0,15">
-                    <TextBlock Text="Телефон" Margin="0,0,0,5"/>
-                    <TextBox Text="{Binding Employee.Phone}" Height="25"/>
+                    <TextBlock Text="Отдел" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding Departments}" 
+              DisplayMemberPath="Name"
+              SelectedValue="{Binding Employee.DepartmentId}"
+              SelectedValuePath="DepartmentId"
+              Height="25"/>
                 </StackPanel>
 
                 <!-- Дата приема -->
