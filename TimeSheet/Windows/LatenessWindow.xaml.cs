@@ -19,21 +19,26 @@ namespace TimeSheet.Windows
     /// </summary>
     public partial class LatenessWindow : Window
     {
-        public LatenessWindow(decimal hours, string comment)
+        public LatenessWindow(int minutes, string comment)
         {
             InitializeComponent();
 
-            textLabel.Text = FormatLateTime(hours, comment);
+            textLabel.Text = FormatLateTime(minutes, comment);
         }
 
-        public string FormatLateTime(decimal hours, string comment)
+        public string FormatLateTime(int minutes, string comment)
         {
-            // Разделяем часы на целую и дробную части
-            int wholeHours = (int)hours;
-            int minutes = (int)((hours - wholeHours) * 60);
+            if (minutes < 0)
+            {
+                throw new ArgumentException("Количество минут не может быть отрицательным", nameof(minutes));
+            }
+
+            // Разделяем минуты на часы и оставшиеся минуты
+            int wholeHours = (int)(minutes / 60);
+            int remainingMinutes = (int)(minutes % 60);
 
             // Форматируем строку согласно шаблону
-            return $"Длительность опоздания: {wholeHours} ч. {minutes} мин.\n\nКомментарий: {comment}";
+            return $"Длительность опоздания: {wholeHours} ч. {remainingMinutes} мин.\n\nКомментарий: {comment}";
         }
     }
 }

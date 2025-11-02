@@ -65,7 +65,7 @@
                             CommandParameter="vacations"
                             Style="{StaticResource NavigationButtonStyle}"/>
                     <Button Content="📈 Отчеты" Command="{Binding NavigateCommand}" 
-                            CommandParameter="reports"
+                            CommandParameter="reports" Visibility="{Binding IsAdmin, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             Style="{StaticResource NavigationButtonStyle}"/>
                 </StackPanel>
             </Border>

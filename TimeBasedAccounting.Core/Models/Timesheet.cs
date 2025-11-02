@@ -11,7 +11,7 @@ namespace TimeBasedAccounting.Core.Models
         public int TimesheetId { get; set; }
         public DateTime Date { get; set; }
         public decimal HoursWorked { get; set; } = 0.00m;
-        public string Cooment { get; set; } = string.Empty;
+        public string Comment { get; set; } = string.Empty;
         public DateTime RecordedAt { get; set; } = DateTime.Now;
 
         // Внешние ключи

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 using TimeBasedAccounting.Core.Context;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;

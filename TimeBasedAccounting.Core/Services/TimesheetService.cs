@@ -34,6 +34,7 @@ namespace TimeBasedAccounting.Core.Services
                 existing.HoursWorked = timesheet.HoursWorked;
                 existing.MarkerId = timesheet.MarkerId;
                 existing.RecordedBy = timesheet.RecordedBy;
+                existing.Comment = timesheet.Comment;
                 _db.Timesheets.Update(existing);
                 await _db.SaveChangesAsync();
                 return existing;
@@ -66,6 +67,7 @@ namespace TimeBasedAccounting.Core.Services
             await _db.SaveChangesAsync();
             return lateness;
         }
+
         public async Task<IEnumerable<AttendanceMarker>> GetAttendanceMarkersAsync()
         {
             return await _db.AttendanceMarkers.ToListAsync();

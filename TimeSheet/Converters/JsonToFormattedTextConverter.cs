@@ -1,6 +1,7 @@
 ﻿// Converters/JsonToFormattedTextConverter.cs
 using System;
 using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using System.Windows.Data;
 
@@ -10,30 +11,61 @@ namespace TimeSheet.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string jsonString && !string.IsNullOrEmpty(jsonString))
+            if (value is not string json || string.IsNullOrWhiteSpace(json))
+                return string.Empty;
+
+            try
             {
-                try
+                var sb = new StringBuilder();
+                using var doc = JsonDocument.Parse(json);
+
+                if (doc.RootElement.ValueKind == JsonValueKind.Array)
                 {
-                    // Пытаемся десериализовать JSON для красивого форматирования
-                    using JsonDocument document = JsonDocument.Parse(jsonString);
-                    return JsonSerializer.Serialize(document.RootElement, new JsonSerializerOptions
+                    foreach (var element in doc.RootElement.EnumerateArray())
                     {
-                        WriteIndented = true,
-                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Это исправит Unicode
-                    });
+                        sb.AppendLine(new string('-', 40));
+
+                        foreach (var prop in element.EnumerateObject())
+                        {
+                            string val = prop.Value.ValueKind switch
+                            {
+                                JsonValueKind.String => prop.Value.GetString(),
+                                JsonValueKind.Number => prop.Value.ToString(),
+                                JsonValueKind.True => "Да",
+                                JsonValueKind.False => "Нет",
+                                JsonValueKind.Null => "—",
+                                _ => prop.Value.ToString()
+                            };
+
+                            sb.AppendLine($"{prop.Name}: {val}");
+                        }
+
+                        sb.AppendLine(); // пустая строка между записями
+                    }
+
+                    sb.AppendLine(new string('-', 40));
                 }
-                catch
+                else if (doc.RootElement.ValueKind == JsonValueKind.Object)
                 {
-                    // Если не JSON, возвращаем как есть
-                    return jsonString;
+                    sb.AppendLine(new string('-', 40));
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                        sb.AppendLine($"{prop.Name}: {prop.Value}");
+                    sb.AppendLine(new string('-', 40));
                 }
+                else
+                {
+                    sb.AppendLine(json);
+                }
+
+                return sb.ToString();
             }
-            return "Нет данных для отображения";
+            catch (Exception ex)
+            {
+                return $"Ошибка форматирования JSON:\n{ex.Message}";
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

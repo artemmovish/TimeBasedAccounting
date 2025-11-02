@@ -2,9 +2,12 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Security.AccessControl;
+using System.Windows;
 using TimeBasedAccounting.Core;
 using TimeBasedAccounting.Core.Interfaces;
 using TimeBasedAccounting.Core.Models;
+using TimeSheet.Windows;
 
 namespace TimeSheet.ViewModels
 {
@@ -100,12 +103,21 @@ namespace TimeSheet.ViewModels
             IsOperationMode = true;
         }
 
+        [RelayCommand]
         private void OpenLatenessWindow()
         {
             if (SelectedTimesheet != null)
             {
-                
+                if(SelectedTimesheet.Lateness != null)
+                {
+                    var window = new LatenessWindow(SelectedTimesheet.Lateness.DurationMinutes, SelectedTimesheet.Lateness.Reason);
+                    window.ShowDialog();
+                    return;
+                }
+                MessageBox.Show("Опоздания нет");
+                return;
             }
+            MessageBox.Show("Выберете запись");
         }
         private void OnTimesheetOperationCompleted(object sender, EventArgs e)
         {

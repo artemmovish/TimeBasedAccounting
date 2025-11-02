@@ -159,6 +159,17 @@ namespace TimeBasedAccounting.Core.Context
                 var timesheets = new List<Timesheet>();
                 var random = new Random();
 
+                var latenessReasons = new[]
+                {
+        "Пробки на дорогах",
+        "Проблемы с общественным транспортом",
+        "Посещение врача",
+        "Задержался из-за ребенка",
+        "Поломка автомобиля",
+        "Сильный дождь / снегопад",
+        "Задержка на предыдущей встрече"
+    };
+
                 // Создаем табели для всех сотрудников за последние 30 дней
                 foreach (var employee in db.Employees.Where(e => e.IsActive))
                 {
@@ -168,9 +179,17 @@ namespace TimeBasedAccounting.Core.Context
                         if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
                             continue; // Пропускаем выходные
 
-                        // Гарантируем создание хотя бы одного опоздания для первого сотрудника
-                        var markerId = (employee.EmployeeId == 1 && i == 0) ? 5 : random.Next(1, 8);
-                        var hoursWorked = markerId == 1 ? 8.0m : 0.0m; // 8 часов только для явки
+                        // С вероятностью 10% — опоздание, иначе обычная явка
+                        bool isLate = random.Next(0, 100) < 10;
+                        int markerId = isLate ? 5 : 1;
+
+                        decimal hoursWorked = isLate
+                            ? random.Next(1, 8) // случайно 1–7 часов
+                            : 8.0m;
+
+                        string? comment = isLate
+                            ? latenessReasons[random.Next(latenessReasons.Length)]
+                            : null;
 
                         timesheets.Add(new Timesheet
                         {
@@ -179,7 +198,7 @@ namespace TimeBasedAccounting.Core.Context
                             RecordedAt = date.AddHours(9),
                             EmployeeId = employee.EmployeeId,
                             MarkerId = markerId,
-                            RecordedBy = 2 // user
+                            RecordedBy = 2, 
                         });
                     }
                 }
@@ -191,57 +210,32 @@ namespace TimeBasedAccounting.Core.Context
             // --- Опоздания ---
             if (!db.Latenesses.Any())
             {
-                // Находим табели с маркером "Явка с опозданием"
+                var random = new Random();
+                var latenessReasons = new[]
+                {
+        "Пробки на дорогах",
+        "Проблемы с общественным транспортом",
+        "Посещение врача",
+        "Задержался из-за ребенка",
+        "Поломка автомобиля",
+        "Сильный дождь / снегопад",
+        "Задержка на предыдущей встрече"
+    };
+
                 var lateTimesheets = db.Timesheets
-                    .Where(t => t.MarkerId == 5) // Я/О
-                    .Take(10)
+                    .Where(t => t.MarkerId == 5)
                     .ToList();
 
                 var latenesses = new List<Lateness>();
 
-                if (lateTimesheets.Any())
+                foreach (var timesheet in lateTimesheets)
                 {
-                    // Добавляем опоздания для найденных табелей
-                    foreach (var timesheet in lateTimesheets)
+                    latenesses.Add(new Lateness
                     {
-                        latenesses.Add(new Lateness
-                        {
-                            TimesheetId = timesheet.TimesheetId,
-                            DurationMinutes = new Random().Next(5, 45),
-                            Reason = "Пробки на дорогах"
-                        });
-                    }
-
-                    // Добавляем дополнительные опоздания с разными причинами
-                    latenesses.AddRange(new[]
-                    {
-                        new Lateness
-                        {
-                            TimesheetId = lateTimesheets.First().TimesheetId,
-                            DurationMinutes = 15,
-                            Reason = "Проблемы с общественным транспортом"
-                        },
-                        new Lateness
-                        {
-                            TimesheetId = lateTimesheets.Last().TimesheetId,
-                            DurationMinutes = 25,
-                            Reason = "Посещение врача"
-                        }
+                        TimesheetId = timesheet.TimesheetId,
+                        DurationMinutes = random.Next(5, 45),
+                        Reason = latenessReasons[random.Next(latenessReasons.Length)]
                     });
-                }
-                else
-                {
-                    // Если нет табелей с опозданиями, создаем тестовые
-                    var anyTimesheet = db.Timesheets.FirstOrDefault();
-                    if (anyTimesheet != null)
-                    {
-                        latenesses.Add(new Lateness
-                        {
-                            TimesheetId = anyTimesheet.TimesheetId,
-                            DurationMinutes = 20,
-                            Reason = "Тестовое опоздание"
-                        });
-                    }
                 }
 
                 if (latenesses.Any())
@@ -250,6 +244,7 @@ namespace TimeBasedAccounting.Core.Context
                     db.SaveChanges();
                 }
             }
+
 
             // --- Отпуска ---
             if (!db.Vacations.Any())
