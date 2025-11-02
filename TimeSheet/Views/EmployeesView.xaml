@@ -41,7 +41,7 @@
 
             <Button Grid.Column="2" Content="Обновить" 
                     Command="{Binding LoadEmployeesCommand}"
-                    VerticalAlignment="Bottom" Padding="15,8" 
+                    VerticalAlignment="Bottom" Padding="15,6" 
                     Background="#3498DB" Foreground="White" Height="30"/>
         </Grid>
         <!-- Таблица сотрудников -->
