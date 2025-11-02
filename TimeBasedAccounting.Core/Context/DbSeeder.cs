@@ -154,7 +154,7 @@ namespace TimeBasedAccounting.Core.Context
             if (!db.Timesheets.Any())
             {
                 var today = DateTime.Today;
-                var startOfMonth = new DateTime(today.Year, today.Month, 1);
+                var startOfMonth = new DateTime(today.Year, today.Month - 1, 1);
 
                 var timesheets = new List<Timesheet>();
                 var random = new Random();
