@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type local:ReportsViewModel}">
             <views:ReportsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:CreateUserViewModel}">
+            <views:CreateUserView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -66,6 +69,9 @@
                             Style="{StaticResource NavigationButtonStyle}"/>
                     <Button Content="📈 Отчеты" Command="{Binding NavigateCommand}" 
                             CommandParameter="reports" Visibility="{Binding IsAdmin, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                            Style="{StaticResource NavigationButtonStyle}"/>
+                    <Button Content="👥 Пользователи" Command="{Binding NavigateCommand}" 
+                            CommandParameter="users"
                             Style="{StaticResource NavigationButtonStyle}"/>
                 </StackPanel>
             </Border>

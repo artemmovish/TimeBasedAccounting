@@ -245,7 +245,6 @@ namespace TimeBasedAccounting.Core.Context
                 }
             }
 
-
             // --- Отпуска ---
             if (!db.Vacations.Any())
             {

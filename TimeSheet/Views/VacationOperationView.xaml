@@ -1,0 +1,86 @@
+﻿<!-- VacationOperationView.xaml -->
+<UserControl x:Class="TimeSheet.Views.VacationOperationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Background="White"
+             d:DesignHeight="400" d:DesignWidth="500">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="{Binding Title}" 
+                   FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Форма -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Сотрудник -->
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Сотрудник" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding Employees}" 
+                              DisplayMemberPath="FullName"
+                              SelectedValue="{Binding Vacation.EmployeeId}"
+                              SelectedValuePath="EmployeeId"
+                              Height="25"/>
+                </StackPanel>
+
+                <!-- Тип отпуска -->
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Тип отпуска" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding VacationTypes}" 
+                              DisplayMemberPath="Name"
+                              SelectedValue="{Binding Vacation.VacationTypeId}"
+                              SelectedValuePath="VacationTypeId"
+                              Height="25"/>
+                </StackPanel>
+
+                <!-- Дата начала -->
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Дата начала" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding Vacation.StartDate}" Height="25"/>
+                </StackPanel>
+
+                <!-- Дата окончания -->
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Дата окончания" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding Vacation.EndDate}" Height="25"/>
+                </StackPanel>
+
+                <!-- Статус (только для админов) -->
+                <StackPanel Margin="0,0,0,15" 
+                           Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="Статус" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding VacationStatuses}" 
+                              DisplayMemberPath="Name"
+                              SelectedValue="{Binding Vacation.VacationStatusId}"
+                              SelectedValuePath="VacationStatusId"
+                              Height="25"/>
+                </StackPanel>
+
+                <!-- Комментарий -->
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Комментарий" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding Vacation.Comment}" 
+                             Height="60" 
+                             TextWrapping="Wrap" 
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Отмена" Command="{Binding CancelCommand}"
+                    Padding="15,8" Background="#95A5A6" Foreground="White" Margin="0,0,10,0"/>
+            <Button Content="Сохранить" Command="{Binding SaveVacationCommand}"
+                    Padding="15,8" Background="#27AE60" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

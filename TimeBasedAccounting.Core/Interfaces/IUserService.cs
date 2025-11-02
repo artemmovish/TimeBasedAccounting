@@ -15,6 +15,6 @@ namespace TimeBasedAccounting.Core.Interfaces
     public interface IUserService
     {
         Task<LoginResult> UserLoginAsync(string login, string password);
-        Task<AddUserResult> AddNewUserAsync(string login, string passwordHash, string role, string fullName);
+        Task<User> AddNewUserAsync(string login, string passwordHash, string fullName);
     }
 }

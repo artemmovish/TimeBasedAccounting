@@ -32,11 +32,32 @@ namespace TimeBasedAccounting.Core.Services
         public Task<IEnumerable<Department>> GetDepartmentsAsync() =>
             _db.Departments.Include(d => d.Employees).ToListAsync().ContinueWith(t => t.Result.AsEnumerable());
 
-        public async Task<Employee> CreateEmployeeAsync(Employee employee)
+        public async Task<Employee> SaveEmployeeAsync(Employee employee)
         {
-            employee.IsActive = true;
+            if (employee.EmployeeId == 0)
+            {
+                // Создание нового сотрудника
+                employee.IsActive = true;
+                _db.Employees.Add(employee);
+            }
+            else
+            {
+                // Обновление существующего сотрудника
+                var existing = await _db.Employees.FindAsync(employee.EmployeeId);
+                if (existing == null)
+                    throw new ArgumentException("Employee not found");
 
-            _db.Employees.Add(employee);
+                // Обновляем только разрешенные поля
+                existing.FullName = employee.FullName;
+                existing.Position = employee.Position;
+                existing.DepartmentId = employee.DepartmentId;
+                existing.HireDate = employee.HireDate;
+                existing.IsActive = employee.IsActive;
+
+                // Возвращаем обновленную сущность
+                employee = existing;
+            }
+
             await _db.SaveChangesAsync();
             return employee;
         }

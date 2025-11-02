@@ -3,6 +3,7 @@ using MySqlConnector;
 using System.Data;
 using TimeBasedAccounting.Core.Context;
 using TimeBasedAccounting.Core.Interfaces;
+using TimeBasedAccounting.Core.Models;
 
 namespace TimeBasedAccounting.Core.Services
 {
@@ -15,26 +16,36 @@ namespace TimeBasedAccounting.Core.Services
             _context = context;
         }
 
-        public async Task<AddUserResult> AddNewUserAsync(string login, string passwordHash, string role, string fullName)
+        public async Task<User> AddNewUserAsync(string login, string passwordHash, string fullName)
         {
-            var parameters = new[]
-            {
-                new MySqlParameter("@p_login", login),
-                new MySqlParameter("@p_password_hash", passwordHash),
-                new MySqlParameter("@p_role", role),
-                new MySqlParameter("@p_fullname", fullName)
-            };
-            
-            // Важно: используем контекстное DbSet для AddUserResult
-            var result = await _context.AddUserResults
-                .FromSqlRaw("CALL AddNewUser(@p_login, @p_password_hash, @p_role, @p_fullname)", parameters)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            // Проверяем, существует ли уже пользователь с таким логином
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Login == login);
 
-            return result ?? new AddUserResult { Status = "ERROR", Message = "Unknown error" };
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException("Пользователь с таким логином уже существует");
+            }
+
+            // Создаем нового пользователя
+            var newUser = new User
+            {
+                Login = login.Trim(),
+                PasswordHash = passwordHash,
+                Role = UserRole.Accountant,
+                FullName = fullName.Trim(),
+                CreatedAt = DateTime.Now
+            };
+
+            // Добавляем пользователя в базу данных
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            // Возвращаем созданного пользователя
+            return newUser;
         }
 
-public async Task<LoginResult> UserLoginAsync(string login, string password)
+        public async Task<LoginResult> UserLoginAsync(string login, string password)
     {
         await using var connection = new MySqlConnection(_context.Database.GetConnectionString());
         await connection.OpenAsync();
@@ -57,8 +68,8 @@ public async Task<LoginResult> UserLoginAsync(string login, string password)
 
         return new LoginResult { Status = "FAILED" };
     }
+    }
 
-}
 
 public class AddUserResult
     {

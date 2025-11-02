@@ -35,6 +35,7 @@ namespace TimeSheet.ViewModels
                 "employees" => _serviceProvider.GetRequiredService<EmployeesViewModel>(),
                 "vacations" => _serviceProvider.GetRequiredService<VacationsViewModel>(),
                 "reports" => _serviceProvider.GetRequiredService<ReportsViewModel>(),
+                "users" => _serviceProvider.GetRequiredService<CreateUserViewModel>(),
                 _ => CurrentViewModel
             };
         }

@@ -53,7 +53,7 @@ namespace TimeSheet.ViewModels
         {
             try
             {
-                await _employeeService.CreateEmployeeAsync(Employee);
+                await _employeeService.SaveEmployeeAsync(Employee);
 
                 OnOperationCompleted?.Invoke(this, EventArgs.Empty);
             }

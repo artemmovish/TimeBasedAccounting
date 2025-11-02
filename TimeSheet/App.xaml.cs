@@ -81,6 +81,7 @@ namespace TimeSheet
             services.AddTransient<EmployeeOperationViewModel>();
             services.AddTransient<TimesheetOperationViewModel>();
             services.AddTransient<LatenessOperationViewModel>();
+            services.AddTransient<CreateUserViewModel>();
         }
 
         private void InitializeDatabase()

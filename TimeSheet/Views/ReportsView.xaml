@@ -31,7 +31,6 @@
                           SelectedValuePath="Tag">
                     <ComboBoxItem Content="Посещаемость" Tag="attendance"/>
                     <ComboBoxItem Content="Опоздания" Tag="lateness"/>
-                    <ComboBoxItem Content="Сводный по отделам" Tag="summary"/>
                 </ComboBox>
             </StackPanel>
 

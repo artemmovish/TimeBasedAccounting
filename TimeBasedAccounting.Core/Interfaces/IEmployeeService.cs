@@ -27,7 +27,7 @@ namespace TimeBasedAccounting.Core.Interfaces
         /// </summary>
         Task<IEnumerable<Department>> GetDepartmentsAsync();
 
-        Task<Employee> CreateEmployeeAsync(Employee employee);
+        Task<Employee> SaveEmployeeAsync(Employee employee);
         Task<Employee> UpdateEmployeeAsync(Employee employee);
         Task<bool> DeactivateEmployeeAsync(int employeeId);
         Task<bool> ActivateEmployeeAsync(int employeeId);
