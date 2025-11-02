@@ -71,7 +71,7 @@
                             CommandParameter="reports" Visibility="{Binding IsAdmin, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             Style="{StaticResource NavigationButtonStyle}"/>
                     <Button Content="👥 Пользователи" Command="{Binding NavigateCommand}" 
-                            CommandParameter="users"
+                            CommandParameter="users" Visibility="{Binding IsAdmin, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             Style="{StaticResource NavigationButtonStyle}"/>
                 </StackPanel>
             </Border>
