@@ -96,6 +96,12 @@ namespace TimeSheet.ViewModels
         {
             if (SelectedTimesheet == null) return;
 
+            if (SelectedTimesheet.MarkerId != 5)
+            {
+                MessageBox.Show("Выберете запись с опозданием");
+                return;
+            }
+
             var vm = App.ServiceProvider.GetRequiredService<LatenessOperationViewModel>();
             vm.SetTimesheetId(SelectedTimesheet.TimesheetId);
             vm.OnOperationCompleted += OnLatenessOperationCompleted;

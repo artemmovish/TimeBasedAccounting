@@ -37,7 +37,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="TimeSheet" Foreground="White" 
+                <TextBlock Grid.Column="0" Text="Табель" Foreground="White" 
                           FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Column="2" Text="{Binding CurrentUser}" 

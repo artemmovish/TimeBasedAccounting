@@ -15,7 +15,7 @@ namespace TimeSheet.ViewModels
         private object _currentViewModel;
 
         [ObservableProperty]
-        private string _currentUser = ActiveUser.RoleId ? $"{ActiveUser.FullName} - Табельщик" : $"{ActiveUser.FullName} - Админ";
+        private string _currentUser = ActiveUser.RoleId ? $"{ActiveUser.FullName} - Специалист по табельному учёту" : $"{ActiveUser.FullName} - Админ";
 
         [ObservableProperty]
         private bool _isAdmin = ActiveUser.RoleId ? true : false;

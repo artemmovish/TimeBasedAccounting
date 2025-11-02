@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeSheet.Windows"
         mc:Ignorable="d"
-        Title="LatenessWindow" Height="200" Width="400">
+        Title="Пропуск" Height="200" Width="400">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock x:Name="textLabel" FontSize="16"/>
+        <TextBlock x:Name="textLabel" FontSize="16" TextWrapping="Wrap"/>
     </Grid>
 </Window>
