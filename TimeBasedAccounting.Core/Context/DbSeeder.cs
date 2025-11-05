@@ -155,6 +155,7 @@ namespace TimeBasedAccounting.Core.Context
             {
                 var today = DateTime.Today;
                 var startOfMonth = new DateTime(today.Year, today.Month - 1, 1);
+                var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
                 var timesheets = new List<Timesheet>();
                 var random = new Random();
@@ -170,41 +171,83 @@ namespace TimeBasedAccounting.Core.Context
         "Задержка на предыдущей встрече"
     };
 
-                // Создаем табели для всех сотрудников за последние 30 дней
-                foreach (var employee in db.Employees.Where(e => e.IsActive))
+                // Получаем активных сотрудников и их отпуска
+                var employees = db.Employees.Where(e => e.IsActive).ToList();
+                var vacations = db.Vacations
+                    .Where(v => v.VacationStatusId != 4) // Исключаем отклоненные отпуска
+                    .ToList();
+
+                // Создаем табели для всех сотрудников за последний месяц
+                foreach (var employee in employees)
                 {
+                    // Получаем отпуска сотрудника
+                    var employeeVacations = vacations
+                        .Where(v => v.EmployeeId == employee.EmployeeId)
+                        .ToList();
+
                     for (int i = 0; i < 30; i++)
                     {
                         var date = startOfMonth.AddDays(i);
+
+                        // Пропускаем выходные
                         if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-                            continue; // Пропускаем выходные
+                            continue;
 
-                        // С вероятностью 10% — опоздание, иначе обычная явка
-                        bool isLate = random.Next(0, 100) < 10;
-                        int markerId = isLate ? 5 : 1;
+                        // Проверяем, находится ли сотрудник в отпуске в эту дату
+                        var isOnVacation = employeeVacations.Any(v =>
+                            date >= v.StartDate && date <= v.EndDate);
 
-                        decimal hoursWorked = isLate
-                            ? random.Next(1, 8) // случайно 1–7 часов
-                            : 8.0m;
+                        int markerId;
+                        decimal hoursWorked;
+                        string? comment = null;
 
-                        string? comment = isLate
-                            ? latenessReasons[random.Next(latenessReasons.Length)]
-                            : null;
+                        if (isOnVacation)
+                        {
+                            // Если в отпуске - ставим маркер отпуска
+                            markerId = 2; // ОТП - Отпуск
+                            hoursWorked = 0;
+                            comment = "Находится в отпуске";
+                        }
+                        else
+                        {
+                            // С вероятностью 8% — опоздание, 90% — обычная явка, 2% — неявка
+                            int chance = random.Next(0, 100);
+
+                            if (chance < 8) // 8% вероятность опоздания
+                            {
+                                markerId = 5; // Я/О - Явка с опозданием
+                                hoursWorked = random.Next(5, 8); // 5-7 часов работы при опоздании
+                                comment = latenessReasons[random.Next(latenessReasons.Length)];
+                            }
+                            else if (chance < 98) // 90% вероятность явки
+                            {
+                                markerId = 1; // Я - Явка
+                                hoursWorked = 8.0m;
+                                comment = "d";
+                            }
+                            else // 2% вероятность неявки
+                            {
+                                markerId = 4; // Н - Неявка
+                                hoursWorked = 0;
+                                comment = "Неявка по неуважительной причине";
+                            }
+                        }
 
                         timesheets.Add(new Timesheet
                         {
                             Date = date,
                             HoursWorked = hoursWorked,
-                            RecordedAt = date.AddHours(9),
+                            RecordedAt = date.AddHours(9 + random.Next(0, 3)), // Запись между 9 и 12 часами
                             EmployeeId = employee.EmployeeId,
                             MarkerId = markerId,
-                            RecordedBy = 2, 
+                            RecordedBy = 2, // user
+                            Comment = comment
                         });
                     }
                 }
 
                 db.Timesheets.AddRange(timesheets);
-                db.SaveChanges(); // Сохраняем чтобы получить TimesheetId
+                db.SaveChanges();
             }
 
             // --- Опоздания ---
@@ -222,18 +265,22 @@ namespace TimeBasedAccounting.Core.Context
         "Задержка на предыдущей встрече"
     };
 
+                // Находим все табели с опозданиями (маркер Я/О)
                 var lateTimesheets = db.Timesheets
-                    .Where(t => t.MarkerId == 5)
+                    .Where(t => t.MarkerId == 5) // Я/О - Явка с опозданием
                     .ToList();
 
                 var latenesses = new List<Lateness>();
 
                 foreach (var timesheet in lateTimesheets)
                 {
+                    // Генерируем реалистичное время опоздания: 5-45 минут
+                    var durationMinutes = random.Next(1, 9) * 5; // 5, 10, 15, ..., 45 минут
+
                     latenesses.Add(new Lateness
                     {
                         TimesheetId = timesheet.TimesheetId,
-                        DurationMinutes = random.Next(5, 45),
+                        DurationMinutes = durationMinutes,
                         Reason = latenessReasons[random.Next(latenessReasons.Length)]
                     });
                 }
